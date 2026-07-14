@@ -184,8 +184,8 @@
       <div class="panel-label"><span class="dot"></span>ISS — posição atual</div>
       <div class="readout" id="iss-coords">carregando…</div>
       <div class="sub-row">
-        <div class="sub-stat"><div class="val">~408 km</div><div class="lbl">altitude média</div></div>
-        <div class="sub-stat"><div class="val">27.600 km/h</div><div class="lbl">velocidade</div></div>
+        <div class="sub-stat"><div class="val" id="iss-alt">—</div><div class="lbl">altitude atual</div></div>
+        <div class="sub-stat"><div class="val" id="iss-vel">—</div><div class="lbl">velocidade atual</div></div>
         <div class="sub-stat"><div class="val">~92 min</div><div class="lbl">por órbita</div></div>
       </div>
     </div>
@@ -216,14 +216,17 @@ updateClock();
 async function loadISS() {
   const el = document.getElementById('iss-coords');
   try {
-    const res = await fetch('https://api.open-notify.org/iss-now.json');
+    const res = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
     if (!res.ok) throw new Error('sem resposta');
     const data = await res.json();
-    const lat = parseFloat(data.iss_position.latitude).toFixed(2);
-    const lon = parseFloat(data.iss_position.longitude).toFixed(2);
+    const lat = data.latitude.toFixed(2);
+    const lon = data.longitude.toFixed(2);
     el.innerHTML = `${lat}°, ${lon}°<small>latitude, longitude</small>`;
+
+    document.getElementById('iss-alt').textContent = `${Math.round(data.altitude)} km`;
+    document.getElementById('iss-vel').textContent = `${Math.round(data.velocity).toLocaleString('pt-BR')} km/h`;
   } catch (e) {
-    el.innerHTML = `<span class="err">Não consegui buscar a posição agora.<br>Tente recarregar, ou veja ao vivo em open-notify.org/Open-Notify-API</span>`;
+    el.innerHTML = `<span class="err">Não consegui buscar a posição agora.<br>Tente recarregar, ou veja ao vivo em wheretheiss.at</span>`;
   }
 }
 
@@ -234,15 +237,15 @@ async function loadSolarWind() {
     const res = await fetch('https://services.swpc.noaa.gov/products/summary/solar-wind-speed.json');
     if (!res.ok) throw new Error('sem resposta');
     const data = await res.json();
-    const speed = Math.round(data.WindSpeed);
-    el.innerHTML = `${speed} <span style="font-size:16px">km/s</span><small>velocidade do vento solar</small>`;
+    const speed = Math.round(data[0].proton_speed);
+    el.innerHTML = `${speed} <span style="font-size:16px">km/s</span><small>velocidade do vento solar (prótons)</small>`;
 
     const kpRes = await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json');
     const kpData = await kpRes.json();
-    const lastKp = kpData[kpData.length - 1];
+    const lastKp = kpData[kpData.length - 1].Kp;
     kpRow.innerHTML = `
-      <div class="sub-stat"><div class="val">${lastKp[1]}</div><div class="lbl">índice Kp atual</div></div>
-      <div class="sub-stat"><div class="val">${lastKp[1] >= 5 ? 'tempestade geomagnética' : 'condições calmas'}</div><div class="lbl">status</div></div>
+      <div class="sub-stat"><div class="val">${lastKp.toFixed(1)}</div><div class="lbl">índice Kp atual</div></div>
+      <div class="sub-stat"><div class="val">${lastKp >= 5 ? 'tempestade geomagnética' : 'condições calmas'}</div><div class="lbl">status</div></div>
     `;
   } catch (e) {
     el.innerHTML = `<span class="err">Dados de clima espacial indisponíveis agora.<br>Veja ao vivo em swpc.noaa.gov</span>`;
