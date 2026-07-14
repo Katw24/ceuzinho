@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Orbital</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
+
+  :root{
+    --bg: #0B0F1A;
+    --panel: #121728;
+    --panel-line: #232B44;
+    --text: #E7EAF3;
+    --text-dim: #7C86A3;
+    --amber: #E3A857;
+    --amber-dim: #6B5A38;
+    --alert: #C4655A;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(231,234,243,0.4) 0, transparent 0),
+      radial-gradient(1px 1px at 70% 60%, rgba(231,234,243,0.3) 0, transparent 0),
+      radial-gradient(1px 1px at 40% 80%, rgba(231,234,243,0.5) 0, transparent 0),
+      radial-gradient(1px 1px at 90% 20%, rgba(231,234,243,0.3) 0, transparent 0),
+      radial-gradient(1px 1px at 55% 15%, rgba(231,234,243,0.4) 0, transparent 0),
+      radial-gradient(1px 1px at 10% 65%, rgba(231,234,243,0.3) 0, transparent 0);
+    background-size: 100% 100%;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding: 32px 20px 60px;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--panel-line);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    font-family: 'Newsreader', serif;
+    font-weight: 600;
+    font-size: 28px;
+    margin: 0;
+    letter-spacing: 0.3px;
+  }
+
+  .clock {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 18px;
+  }
+
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 4px;
+    padding: 20px 22px;
+  }
+
+  .panel-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 6px var(--amber);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .readout {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 32px;
+    line-height: 1.3;
+  }
+
+  .readout small {
+    font-size: 13px;
+    color: var(--text-dim);
+    display: block;
+    font-family: 'Inter', sans-serif;
+    margin-top: 2px;
+  }
+
+  .sub-row {
+    display: flex;
+    gap: 28px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--panel-line);
+  }
+
+  .sub-stat { font-family: 'IBM Plex Mono', monospace; }
+  .sub-stat .val { font-size: 16px; color: var(--text); }
+  .sub-stat .lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+  .full { grid-column: 1 / -1; }
+
+  .apod-img {
+    width: 100%;
+    border-radius: 3px;
+    display: block;
+    margin-top: 12px;
+    filter: saturate(1.05);
+  }
+
+  .apod-title {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 17px;
+    margin-top: 14px;
+    color: var(--text);
+  }
+
+  .apod-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-top: 6px;
+    max-height: 4.8em;
+    overflow: hidden;
+  }
+
+  .err {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--alert);
+    line-height: 1.6;
+  }
+
+  .footnote {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 30px;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Painel Orbital</h1>
+    <div class="clock" id="clock">--:--:--</div>
+  </header>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-label"><span class="dot"></span>ISS — posição atual</div>
+      <div class="readout" id="iss-coords">carregando…</div>
+      <div class="sub-row">
+        <div class="sub-stat"><div class="val">~408 km</div><div class="lbl">altitude média</div></div>
+        <div class="sub-stat"><div class="val">27.600 km/h</div><div class="lbl">velocidade</div></div>
+        <div class="sub-stat"><div class="val">~92 min</div><div class="lbl">por órbita</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label"><span class="dot"></span>Clima espacial — vento solar</div>
+      <div id="solar-wind" class="readout">carregando…</div>
+      <div class="sub-row" id="kp-row"></div>
+    </div>
+
+    <div class="panel full">
+      <div class="panel-label"><span class="dot"></span>Imagem astronômica do dia — NASA</div>
+      <div id="apod"></div>
+    </div>
+  </div>
+
+  <div class="footnote" id="footnote">fontes: Open Notify · NOAA SWPC · NASA APOD (demo key)</div>
+</div>
+
+<script>
+function updateClock() {
+  const d = new Date();
+  document.getElementById('clock').textContent = d.toLocaleTimeString('pt-BR');
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+async function loadISS() {
+  const el = document.getElementById('iss-coords');
+  try {
+    const res = await fetch('https://api.open-notify.org/iss-now.json');
+    if (!res.ok) throw new Error('sem resposta');
+    const data = await res.json();
+    const lat = parseFloat(data.iss_position.latitude).toFixed(2);
+    const lon = parseFloat(data.iss_position.longitude).toFixed(2);
+    el.innerHTML = `${lat}°, ${lon}°<small>latitude, longitude</small>`;
+  } catch (e) {
+    el.innerHTML = `<span class="err">Não consegui buscar a posição agora.<br>Tente recarregar, ou veja ao vivo em open-notify.org/Open-Notify-API</span>`;
+  }
+}
+
+async function loadSolarWind() {
+  const el = document.getElementById('solar-wind');
+  const kpRow = document.getElementById('kp-row');
+  try {
+    const res = await fetch('https://services.swpc.noaa.gov/products/summary/solar-wind-speed.json');
+    if (!res.ok) throw new Error('sem resposta');
+    const data = await res.json();
+    const speed = Math.round(data.WindSpeed);
+    el.innerHTML = `${speed} <span style="font-size:16px">km/s</span><small>velocidade do vento solar</small>`;
+
+    const kpRes = await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json');
+    const kpData = await kpRes.json();
+    const lastKp = kpData[kpData.length - 1];
+    kpRow.innerHTML = `
+      <div class="sub-stat"><div class="val">${lastKp[1]}</div><div class="lbl">índice Kp atual</div></div>
+      <div class="sub-stat"><div class="val">${lastKp[1] >= 5 ? 'tempestade geomagnética' : 'condições calmas'}</div><div class="lbl">status</div></div>
+    `;
+  } catch (e) {
+    el.innerHTML = `<span class="err">Dados de clima espacial indisponíveis agora.<br>Veja ao vivo em swpc.noaa.gov</span>`;
+  }
+}
+
+async function loadAPOD() {
+  const el = document.getElementById('apod');
+  try {
+    const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
+    if (!res.ok) throw new Error('sem resposta');
+    const data = await res.json();
+    if (data.media_type === 'image') {
+      el.innerHTML = `
+        <img class="apod-img" src="${data.url}" alt="${data.title}">
+        <div class="apod-title">${data.title}</div>
+        <div class="apod-desc">${data.explanation}</div>
+      `;
+    } else {
+      el.innerHTML = `<div class="apod-title">${data.title}</div><div class="apod-desc">Hoje é um vídeo — veja em apod.nasa.gov</div>`;
+    }
+  } catch (e) {
+    el.innerHTML = `<span class="err">A NASA limita a chave de demonstração (DEMO_KEY) a poucos pedidos por hora.<br>Pegue sua própria chave grátis em api.nasa.gov e troque no código (linha do fetch do APOD) para uso ilimitado.</span>`;
+  }
+}
+
+loadISS();
+loadSolarWind();
+loadAPOD();
+setInterval(loadISS, 15000);
+</script>
+</body>
+</html>
