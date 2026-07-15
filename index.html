@@ -4,28 +4,31 @@
 <meta charset="UTF-8">
 <title>Painel Orbital — Observatório</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Baloo+2:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
 
   :root{
-    --bg: #12142A;
-    --panel: #171A34;
-    --panel-line: #2A2E52;
-    --parchment: #EFE3C8;
-    --parchment-line: #D8C9A0;
-    --ink: #2B2418;
-    --ink-dim: #6B6350;
-    --text: #EDE6D6;
-    --text-dim: #8B87A0;
-    --brass: #C9A227;
-    --brass-dim: #4A4022;
-    --alert: #C4655A;
+    --bg: #EFE6F6;
+    --bg2: #FCE9EF;
+    --panel: #FFFCF9;
+    --panel-line: #E6D6EC;
+    --parchment: #FFF7EC;
+    --parchment-line: #F0DFC2;
+    --ink: #4A3B63;
+    --ink-dim: #9C89AD;
+    --text: #4A3B63;
+    --text-dim: #A897B8;
+    --brass: #F2A94E;
+    --brass-dim: #FCE3BE;
+    --pink: #F3A6C4;
+    --lav: #B7A3E0;
+    --alert: #EB8B78;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background: var(--bg);
+    background: linear-gradient(160deg, var(--bg) 0%, var(--bg2) 100%);
     color: var(--text);
     font-family: 'Inter', sans-serif;
     padding: 0 20px 70px;
@@ -60,22 +63,23 @@
     font-weight: 600;
     font-size: 40px;
     margin: 0;
-    color: var(--parchment);
+    color: #4A3B63;
     letter-spacing: 0.4px;
+    text-shadow: 0 1px 8px rgba(255,255,255,0.5);
   }
 
   .subtitle {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 17px;
-    color: var(--brass);
+    color: #7A5F94;
     margin-top: 2px;
   }
 
   .clock {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
-    color: var(--text-dim);
+    color: #7A5F94;
   }
 
   .wrap { max-width: 880px; margin: 0 auto; }
@@ -93,43 +97,58 @@
   .panel {
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: 6px;
-    padding: 20px 22px;
+    border-radius: 20px;
+    padding: 0 22px 22px;
     position: relative;
+    box-shadow: 0 6px 18px rgba(183, 163, 224, 0.18);
+    overflow: hidden;
   }
 
   .panel::before {
     content: '';
     position: absolute;
-    top: 8px; left: 8px; right: 8px; bottom: 8px;
-    border: 1px solid rgba(201,162,39,0.15);
-    border-radius: 3px;
+    top: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(90deg, var(--lav), var(--pink));
     pointer-events: none;
   }
 
   .panel-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--brass);
-    margin-bottom: 14px;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    color: #FFFFFF;
+    margin: 0 -22px 18px;
+    padding: 11px 50px 11px 18px;
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .panel-label::after {
+    content: '● ● ●';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.75);
   }
 
   .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--brass);
-    box-shadow: 0 0 6px var(--brass);
+    display: inline-block;
+    font-size: 12px;
     animation: pulse 2s infinite;
   }
+  .dot::before { content: '✦'; }
 
   @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0.4; }
   }
 
   .readout {
@@ -203,11 +222,11 @@
   }
 
   select {
-    background: var(--bg);
-    color: var(--parchment);
-    border: 1px solid var(--brass-dim);
-    border-radius: 3px;
-    padding: 9px 14px;
+    background: var(--parchment);
+    color: var(--ink);
+    border: 1px solid var(--parchment-line);
+    border-radius: 999px;
+    padding: 9px 16px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
   }
@@ -285,8 +304,8 @@
     background: var(--parchment);
     color: var(--ink);
     border: 1px solid var(--parchment-line);
-    border-radius: 4px;
-    padding: 12px 14px;
+    border-radius: 16px;
+    padding: 12px 16px;
     font-family: 'Cormorant Garamond', serif;
     font-size: 16px;
     line-height: 1.5;
@@ -308,10 +327,10 @@
 
   #note-add {
     background: var(--brass);
-    color: #1A1408;
+    color: #ffffff;
     border: none;
-    border-radius: 3px;
-    padding: 9px 18px;
+    border-radius: 999px;
+    padding: 9px 20px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     letter-spacing: 1px;
@@ -453,12 +472,12 @@
     display: inline-block;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 3px;
+    padding: 3px 10px;
+    border-radius: 999px;
     letter-spacing: 0.5px;
   }
-  .badge.up { background: var(--brass-dim); color: var(--brass); }
-  .badge.down { background: #3A2A28; color: var(--alert); }
+  .badge.up { background: var(--brass-dim); color: #B5720B; }
+  .badge.down { background: #FBDCD3; color: #C0553D; }
 
   .follow-row {
     display: flex;
@@ -490,19 +509,31 @@
 
 <div class="sky-header">
   <svg viewBox="0 0 900 210" preserveAspectRatio="xMidYMid slice">
-    <circle cx="60" cy="40" r="1.4" fill="#EDE6D6"/>
-    <circle cx="140" cy="90" r="1" fill="#EDE6D6" opacity="0.7"/>
-    <circle cx="230" cy="50" r="1.6" fill="#EDE6D6"/>
-    <circle cx="310" cy="110" r="1" fill="#EDE6D6" opacity="0.6"/>
-    <circle cx="380" cy="60" r="1.2" fill="#EDE6D6"/>
-    <circle cx="470" cy="30" r="1" fill="#EDE6D6" opacity="0.7"/>
-    <circle cx="540" cy="95" r="1.5" fill="#EDE6D6"/>
-    <circle cx="620" cy="55" r="1" fill="#EDE6D6" opacity="0.6"/>
-    <circle cx="700" cy="100" r="1.3" fill="#EDE6D6"/>
-    <circle cx="780" cy="45" r="1" fill="#EDE6D6" opacity="0.7"/>
-    <circle cx="840" cy="85" r="1.6" fill="#EDE6D6"/>
-    <path d="M60 40 L230 50 L310 110 L380 60 L470 30" fill="none" stroke="#C9A227" stroke-width="0.6" opacity="0.5"/>
-    <path d="M540 95 L620 55 L700 100 L780 45 L840 85" fill="none" stroke="#C9A227" stroke-width="0.6" opacity="0.5"/>
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#C9B6E8"/>
+        <stop offset="55%" stop-color="#EAC0D6"/>
+        <stop offset="100%" stop-color="#FBE3D8"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="900" height="210" fill="url(#skyGrad)"/>
+    <circle cx="450" cy="205" r="230" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.55"/>
+    <circle cx="60" cy="40" r="1.6" fill="#FFFFFF"/>
+    <circle cx="140" cy="90" r="1.2" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="230" cy="50" r="1.8" fill="#FFFFFF"/>
+    <circle cx="310" cy="110" r="1.2" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="380" cy="60" r="1.4" fill="#FFFFFF"/>
+    <circle cx="470" cy="30" r="1.2" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="540" cy="95" r="1.7" fill="#FFFFFF"/>
+    <circle cx="620" cy="55" r="1.2" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="700" cy="100" r="1.5" fill="#FFFFFF"/>
+    <circle cx="780" cy="45" r="1.2" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="840" cy="85" r="1.8" fill="#FFFFFF"/>
+    <path d="M60 40 L230 50 L310 110 L380 60 L470 30" fill="none" stroke="#FFFFFF" stroke-width="0.6" opacity="0.45"/>
+    <path d="M540 95 L620 55 L700 100 L780 45 L840 85" fill="none" stroke="#FFFFFF" stroke-width="0.6" opacity="0.45"/>
+    <path d="M100 150 l6 -14 l6 14 l14 6 l-14 6 l-6 14 l-6 -14 l-14 -6 z" fill="#FCE3BE" opacity="0.9"/>
+    <path d="M790 130 l5 -11 l5 11 l11 5 l-11 5 l-5 11 l-5 -11 l-11 -5 z" fill="#F3A6C4" opacity="0.9"/>
+    <path d="M470 170 l4 -9 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 z" fill="#FFFFFF" opacity="0.8"/>
   </svg>
   <div class="header-content">
     <div>
@@ -549,24 +580,24 @@
       <div class="observatory">
         <div class="eyepiece-wrap">
           <svg viewBox="0 0 240 240" width="240" height="240">
-            <circle cx="120" cy="120" r="112" fill="#0C0D1E" stroke="#4A4022" stroke-width="2"/>
-            <circle cx="120" cy="120" r="100" fill="none" stroke="#2A2E52" stroke-width="1"/>
-            <circle cx="120" cy="120" r="66" fill="none" stroke="#2A2E52" stroke-width="0.6"/>
-            <circle cx="120" cy="120" r="33" fill="none" stroke="#2A2E52" stroke-width="0.6"/>
-            <g stroke="#4A4022" stroke-width="1.5">
+            <circle cx="120" cy="120" r="112" fill="#211B36" stroke="#F2A94E" stroke-width="3"/>
+            <circle cx="120" cy="120" r="100" fill="none" stroke="#3E3459" stroke-width="1"/>
+            <circle cx="120" cy="120" r="66" fill="none" stroke="#3E3459" stroke-width="0.6"/>
+            <circle cx="120" cy="120" r="33" fill="none" stroke="#3E3459" stroke-width="0.6"/>
+            <g stroke="#F2A94E" stroke-width="1.5">
               <line x1="120" y1="8" x2="120" y2="20"/>
               <line x1="120" y1="220" x2="120" y2="232"/>
               <line x1="8" y1="120" x2="20" y2="120"/>
               <line x1="220" y1="120" x2="232" y2="120"/>
             </g>
-            <text x="120" y="30" text-anchor="middle" fill="#8B87A0" font-family="IBM Plex Mono" font-size="11">N</text>
-            <text x="120" y="214" text-anchor="middle" fill="#8B87A0" font-family="IBM Plex Mono" font-size="11">S</text>
-            <text x="206" y="124" text-anchor="middle" fill="#8B87A0" font-family="IBM Plex Mono" font-size="11">L</text>
-            <text x="34" y="124" text-anchor="middle" fill="#8B87A0" font-family="IBM Plex Mono" font-size="11">O</text>
-            <circle cx="120" cy="120" r="112" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.4"/>
-            <path id="trail-path" fill="none" stroke="#C9A227" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>
-            <circle id="scrub-dot" cx="120" cy="120" r="4.5" fill="none" stroke="#C9A227" stroke-width="1.5" opacity="0"/>
-            <circle id="body-dot" cx="120" cy="120" r="7" fill="#C9A227"/>
+            <text x="120" y="30" text-anchor="middle" fill="#C7B8E0" font-family="IBM Plex Mono" font-size="11">N</text>
+            <text x="120" y="214" text-anchor="middle" fill="#C7B8E0" font-family="IBM Plex Mono" font-size="11">S</text>
+            <text x="206" y="124" text-anchor="middle" fill="#C7B8E0" font-family="IBM Plex Mono" font-size="11">L</text>
+            <text x="34" y="124" text-anchor="middle" fill="#C7B8E0" font-family="IBM Plex Mono" font-size="11">O</text>
+            <circle cx="120" cy="120" r="112" fill="none" stroke="#F2A94E" stroke-width="1" opacity="0.4"/>
+            <path id="trail-path" fill="none" stroke="#F2A94E" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>
+            <circle id="scrub-dot" cx="120" cy="120" r="4.5" fill="none" stroke="#F2A94E" stroke-width="1.5" opacity="0"/>
+            <circle id="body-dot" cx="120" cy="120" r="7" fill="#F2A94E"/>
           </svg>
         </div>
 
@@ -743,7 +774,7 @@ function updateSkyDot(azimuth, altitude) {
   const dot = document.getElementById('body-dot');
   dot.setAttribute('cx', x.toFixed(1));
   dot.setAttribute('cy', y.toFixed(1));
-  dot.setAttribute('fill', altitude > 0 ? '#C9A227' : '#5B6B8C');
+  dot.setAttribute('fill', altitude > 0 ? '#F2A94E' : '#B7A3E0');
 }
 
 // Percurso da estrela pelo céu nas próximas 24h (amostragem a cada 15 min)
@@ -794,7 +825,7 @@ function updateScrub(baseDate, offsetMinutes) {
   scrubDot.setAttribute('cx', x.toFixed(1));
   scrubDot.setAttribute('cy', y.toFixed(1));
   scrubDot.setAttribute('opacity', '1');
-  scrubDot.setAttribute('stroke', hor.altitude > 0 ? '#C9A227' : '#5B6B8C');
+  scrubDot.setAttribute('stroke', hor.altitude > 0 ? '#F2A94E' : '#B7A3E0');
   label.textContent = fmtDate(t);
 }
 
