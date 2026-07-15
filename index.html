@@ -221,6 +221,104 @@
     margin-bottom: 4px;
   }
 
+  .notebook textarea {
+    width: 100%;
+    min-height: 76px;
+    background: var(--parchment);
+    color: var(--ink);
+    border: 1px solid var(--parchment-line);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: vertical;
+    margin-top: 12px;
+  }
+
+  .notebook-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+  }
+
+  .notebook-controls select {
+    padding: 7px 10px;
+  }
+
+  #note-add {
+    background: var(--brass);
+    color: #1A1408;
+    border: none;
+    border-radius: 3px;
+    padding: 9px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  #note-add:hover { filter: brightness(1.1); }
+
+  .note-list {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .note-item {
+    background: var(--parchment);
+    color: var(--ink);
+    border-radius: 4px;
+    padding: 12px 34px 12px 14px;
+    position: relative;
+    box-shadow: inset 0 0 0 1px var(--parchment-line);
+  }
+
+  .note-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .note-text {
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+
+  .note-delete {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ink-dim);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+
+  .note-delete:hover { color: var(--alert); }
+
+  .note-empty {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 22px 0;
+  }
+
   /* --- Observatório: visor de luneta --- */
   .observatory {
     display: grid;
@@ -381,8 +479,8 @@
     </div>
 
     <div class="panel full">
-      <div class="panel-label"><span class="dot"></span>Observatório — Próxima Centauri b</div>
-      <div class="exo-subtitle">o exoplaneta conhecido mais próximo da Terra</div>
+      <div class="panel-label"><span class="dot"></span>Observatório — K2-18 b</div>
+      <div class="exo-subtitle">o mundo em disputa: suspeita de biossinatura ainda não confirmada</div>
 
       <div class="follow-row">
         <span class="lbl">seguir ao longo do dia</span>
@@ -415,8 +513,8 @@
         </div>
 
         <div class="analysis-card" id="analysis-card">
-          <div class="analysis-type" id="analysis-type">exoplaneta rochoso</div>
-          <div class="analysis-name" id="analysis-name">Próxima Centauri b</div>
+          <div class="analysis-type" id="analysis-type">sub-Netuno / mundo "hycean"</div>
+          <div class="analysis-name" id="analysis-name">K2-18 b</div>
           <div class="analysis-fact" id="analysis-fact">—</div>
           <div class="analysis-grid">
             <div><div class="lbl">status</div><div class="val" id="obs-status">calculando…</div></div>
@@ -431,7 +529,26 @@
           </div>
         </div>
       </div>
-      <div class="footnote" style="text-align:left; margin-top:18px;">posição da estrela Próxima Centauri calculada para São Paulo (-23.55, -46.63) · astronomy-engine, direto no navegador</div>
+      <div class="footnote" style="text-align:left; margin-top:18px;">posição da estrela K2-18 calculada para São Paulo (-23.55, -46.63) · astronomy-engine, direto no navegador</div>
+    </div>
+
+    <div class="panel full">
+      <div class="panel-label"><span class="dot"></span>Caderneta de campo</div>
+      <div class="exo-subtitle">suas anotações e cálculos sobre K2-18 b</div>
+
+      <div class="notebook">
+        <textarea id="note-input" placeholder="Anote uma descoberta, uma dúvida, um cálculo…"></textarea>
+        <div class="notebook-controls">
+          <select id="note-tag">
+            <option value="pesquisa">pesquisa</option>
+            <option value="calculo">cálculo</option>
+            <option value="duvida">dúvida</option>
+          </select>
+          <button id="note-add">anotar</button>
+        </div>
+      </div>
+
+      <div id="note-list" class="note-list"></div>
     </div>
 
     <div class="footnote full" id="footnote">fontes: wheretheiss.at · NOAA SWPC · NASA APOD (demo key) · astronomy-engine</div>
@@ -515,17 +632,17 @@ import * as Astronomy from 'https://cdn.jsdelivr.net/npm/astronomy-engine/+esm';
 
 const observer = new Astronomy.Observer(-23.5505, -46.6333, 760);
 
-// Coordenadas J2000 da estrela Próxima Centauri (RA em horas, Dec em graus)
-const STAR_RA = 14.495263;
-const STAR_DEC = -62.679484;
+// Coordenadas J2000 da estrela K2-18 (RA em horas, Dec em graus)
+const STAR_RA = 11.504028;
+const STAR_DEC = 7.588333;
 
 const exoInfo = {
-  name: 'Próxima Centauri b',
-  type: 'exoplaneta rochoso',
-  fact: 'Orbita a Próxima Centauri, a estrela mais próxima do Sol, dentro da zona habitável dela. Provavelmente é travado por maré (sempre mostra o mesmo lado pra sua estrela) e é alvo do projeto Breakthrough Starshot, que sonha em mandar sondas até lá.',
-  distance: '4,25 anos-luz (~40 trilhões km)',
-  hostMagnitude: '11,1 (precisa de telescópio)',
-  orbitalPeriod: '11,2 dias terrestres'
+  name: 'K2-18 b',
+  type: 'sub-Netuno / mundo "hycean" (candidato)',
+  fact: 'Órbita a estrela anã vermelha K2-18, na zona habitável. A hipótese principal é que seja um mundo oceânico coberto por uma atmosfera densa de hidrogênio. Em 2023 e 2025, o telescópio James Webb detectou possíveis sinais de dimetilsulfeto (DMS) — um gás que na Terra só é produzido por vida marinha. A descoberta é disputada: reanálises independentes dos mesmos dados não confirmaram o sinal. É ciência em aberto, não uma conclusão.',
+  distance: '124 anos-luz (~38 parsecs)',
+  hostMagnitude: '13,5 (precisa de telescópio, ~20cm+)',
+  orbitalPeriod: '33 dias terrestres'
 };
 
 function starHorizon(time) {
@@ -653,6 +770,96 @@ slider.addEventListener('input', () => {
 
 computeExo();
 setInterval(computeExo, 60000);
+</script>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'k2-18-caderneta';
+  const listEl = document.getElementById('note-list');
+  const inputEl = document.getElementById('note-input');
+  const tagEl = document.getElementById('note-tag');
+  const addBtn = document.getElementById('note-add');
+
+  const tagLabels = { pesquisa: 'pesquisa', calculo: 'cálculo', duvida: 'dúvida' };
+
+  function loadNotes() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveNotes(notes) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+  }
+
+  function render() {
+    const notes = loadNotes();
+    listEl.innerHTML = '';
+
+    if (notes.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'note-empty';
+      empty.textContent = 'nenhuma anotação ainda — comece a preencher sua caderneta';
+      listEl.appendChild(empty);
+      return;
+    }
+
+    notes.slice().reverse().forEach((note, revIdx) => {
+      const idx = notes.length - 1 - revIdx;
+      const item = document.createElement('div');
+      item.className = 'note-item';
+
+      const meta = document.createElement('div');
+      meta.className = 'note-meta';
+      const tagSpan = document.createElement('span');
+      tagSpan.textContent = tagLabels[note.tag] || note.tag;
+      const dateSpan = document.createElement('span');
+      dateSpan.textContent = new Date(note.time).toLocaleString('pt-BR', {
+        timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+      });
+      meta.appendChild(tagSpan);
+      meta.appendChild(dateSpan);
+
+      const text = document.createElement('div');
+      text.className = 'note-text';
+      text.textContent = note.text;
+
+      const del = document.createElement('button');
+      del.className = 'note-delete';
+      del.title = 'apagar';
+      del.textContent = '×';
+      del.addEventListener('click', () => {
+        const current = loadNotes();
+        current.splice(idx, 1);
+        saveNotes(current);
+        render();
+      });
+
+      item.appendChild(meta);
+      item.appendChild(text);
+      item.appendChild(del);
+      listEl.appendChild(item);
+    });
+  }
+
+  addBtn.addEventListener('click', () => {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    const notes = loadNotes();
+    notes.push({ text, tag: tagEl.value, time: Date.now() });
+    saveNotes(notes);
+    inputEl.value = '';
+    render();
+  });
+
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) addBtn.click();
+  });
+
+  render();
+})();
 </script>
 </body>
 </html>
