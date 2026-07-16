@@ -4,24 +4,24 @@
 <meta charset="UTF-8">
 <title>Painel Orbital — Observatório</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Baloo+2:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Baloo+2:wght@500;600;700&family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
 
   :root{
-    --bg: #EFE6F6;
-    --bg2: #FCE9EF;
-    --panel: #FFFCF9;
-    --panel-line: #E6D6EC;
+    --bg: #0B1F1D;
+    --bg2: #0C1B2B;
+    --panel: #132E2C;
+    --panel-line: #294D48;
     --parchment: #FFF7EC;
     --parchment-line: #F0DFC2;
     --ink: #4A3B63;
     --ink-dim: #9C89AD;
-    --text: #4A3B63;
-    --text-dim: #A897B8;
-    --brass: #F2A94E;
-    --brass-dim: #FCE3BE;
-    --pink: #F3A6C4;
-    --lav: #B7A3E0;
-    --alert: #EB8B78;
+    --text: #DCEDE6;
+    --text-dim: #7FA79C;
+    --brass: #E8B96B;
+    --brass-dim: #3A2F1A;
+    --pink: #4FA98C;
+    --lav: #26586B;
+    --alert: #E0836A;
   }
 
   * { box-sizing: border-box; }
@@ -63,23 +63,23 @@
     font-weight: 600;
     font-size: 40px;
     margin: 0;
-    color: #4A3B63;
+    color: #EAF6F0;
     letter-spacing: 0.4px;
-    text-shadow: 0 1px 8px rgba(255,255,255,0.5);
+    text-shadow: 0 1px 10px rgba(0,0,0,0.35);
   }
 
   .subtitle {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 17px;
-    color: #7A5F94;
+    color: #9FD8C4;
     margin-top: 2px;
   }
 
   .clock {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
-    color: #7A5F94;
+    color: #7FA79C;
   }
 
   .wrap { max-width: 880px; margin: 0 auto; }
@@ -298,68 +298,156 @@
     margin-top: 3px;
   }
 
-  .notebook textarea {
+  .journal {
+    position: relative;
+    margin-top: 26px;
+    background: linear-gradient(160deg, #E7CFA0, #D9B77F);
+    border: 5px solid #8B5E3C;
+    border-radius: 18px;
+    padding: 28px 20px 20px;
+    box-shadow: inset 0 0 0 2px rgba(139,94,60,0.3), 0 8px 18px rgba(139,94,60,0.28);
+  }
+
+  .journal-ribbon {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--alert);
+    color: #fff;
+    padding: 10px 24px 12px;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+    z-index: 2;
+  }
+
+  .journal-ribbon-num {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .journal-ribbon-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    letter-spacing: 1px;
+    margin-top: 5px;
+  }
+
+  .journal-book {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr;
+    gap: 0;
+  }
+
+  @media (max-width: 700px) {
+    .journal-book { grid-template-columns: 1fr; }
+    .journal-spine { display: none; }
+  }
+
+  .journal-page {
+    background: #F8ECC9;
+    padding: 18px;
+    box-shadow: inset 0 0 0 1px #E4CE9C;
+  }
+
+  .journal-left { border-radius: 12px 4px 4px 12px; }
+  .journal-right { border-radius: 4px 12px 12px 4px; }
+
+  .journal-spine {
+    background-image: radial-gradient(circle, #8B5E3C 3px, transparent 3.5px);
+    background-size: 100% 22px;
+    background-repeat: repeat-y;
+    background-position: center top;
+  }
+
+  .journal-heading {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #8A5A2E;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+
+  .journal textarea {
     width: 100%;
-    min-height: 76px;
-    background: var(--parchment);
-    color: var(--ink);
-    border: 1px solid var(--parchment-line);
-    border-radius: 16px;
-    padding: 12px 16px;
+    min-height: 80px;
+    background: #FFFAEC;
+    color: #4A3520;
+    border: 2px solid #D9BD86;
+    border-radius: 10px;
+    padding: 12px 14px;
     font-family: 'Cormorant Garamond', serif;
     font-size: 16px;
     line-height: 1.5;
     resize: vertical;
-    margin-top: 12px;
   }
 
-  .notebook-controls {
+  .journal-tags {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
     margin-top: 10px;
-    gap: 10px;
   }
 
-  .notebook-controls select {
-    padding: 7px 10px;
-  }
-
-  #note-add {
-    background: var(--brass);
-    color: #ffffff;
-    border: none;
-    border-radius: 999px;
-    padding: 9px 20px;
+  .tag-btn {
+    background: #EFDFB2;
+    border: 2px solid #D9BD86;
+    border-radius: 8px;
+    padding: 6px 10px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    color: #7A5A32;
     cursor: pointer;
   }
 
-  #note-add:hover { filter: brightness(1.1); }
+  .tag-btn.active {
+    background: var(--brass);
+    color: #fff;
+    border-color: #B5720B;
+  }
+
+  #note-add {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    background: var(--alert);
+    color: #ffffff;
+    border: none;
+    border-bottom: 4px solid #B5544A;
+    border-radius: 10px;
+    padding: 11px 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+  }
+
+  #note-add:active { border-bottom-width: 1px; margin-top: 17px; }
+  #note-add:hover { filter: brightness(1.05); }
 
   .note-list {
-    margin-top: 18px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: 320px;
+    overflow-y: auto;
   }
 
   .note-item {
-    background: var(--parchment);
-    color: var(--ink);
-    border-radius: 4px;
-    padding: 12px 34px 12px 14px;
+    background: #FFFAEC;
+    color: #4A3520;
+    border: 2px solid #E4CE9C;
+    border-radius: 8px;
+    padding: 10px 32px 10px 12px;
     position: relative;
-    box-shadow: inset 0 0 0 1px var(--parchment-line);
   }
 
   .note-meta {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
-    color: var(--ink-dim);
+    color: #A98858;
     text-transform: uppercase;
     letter-spacing: 1px;
     display: flex;
@@ -379,7 +467,7 @@
     right: 10px;
     background: none;
     border: none;
-    color: var(--ink-dim);
+    color: #B99A6C;
     cursor: pointer;
     font-size: 15px;
     line-height: 1;
@@ -391,7 +479,7 @@
   .note-empty {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
-    color: var(--text-dim);
+    color: #A98858;
     text-align: center;
     padding: 22px 0;
   }
@@ -511,9 +599,9 @@
   <svg viewBox="0 0 900 210" preserveAspectRatio="xMidYMid slice">
     <defs>
       <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#C9B6E8"/>
-        <stop offset="55%" stop-color="#EAC0D6"/>
-        <stop offset="100%" stop-color="#FBE3D8"/>
+        <stop offset="0%" stop-color="#0C1B2B"/>
+        <stop offset="55%" stop-color="#123330"/>
+        <stop offset="100%" stop-color="#173F35"/>
       </linearGradient>
     </defs>
     <rect x="0" y="0" width="900" height="210" fill="url(#skyGrad)"/>
@@ -531,8 +619,8 @@
     <circle cx="840" cy="85" r="1.8" fill="#FFFFFF"/>
     <path d="M60 40 L230 50 L310 110 L380 60 L470 30" fill="none" stroke="#FFFFFF" stroke-width="0.6" opacity="0.45"/>
     <path d="M540 95 L620 55 L700 100 L780 45 L840 85" fill="none" stroke="#FFFFFF" stroke-width="0.6" opacity="0.45"/>
-    <path d="M100 150 l6 -14 l6 14 l14 6 l-14 6 l-6 14 l-6 -14 l-14 -6 z" fill="#FCE3BE" opacity="0.9"/>
-    <path d="M790 130 l5 -11 l5 11 l11 5 l-11 5 l-5 11 l-5 -11 l-11 -5 z" fill="#F3A6C4" opacity="0.9"/>
+    <path d="M100 150 l6 -14 l6 14 l14 6 l-14 6 l-6 14 l-6 -14 l-14 -6 z" fill="#E8B96B" opacity="0.9"/>
+    <path d="M790 130 l5 -11 l5 11 l11 5 l-11 5 l-5 11 l-5 -11 l-11 -5 z" fill="#6FE0C2" opacity="0.9"/>
     <path d="M470 170 l4 -9 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 z" fill="#FFFFFF" opacity="0.8"/>
   </svg>
   <div class="header-content">
@@ -546,27 +634,6 @@
 
 <div class="wrap">
   <div class="grid">
-    <div class="panel">
-      <div class="panel-label"><span class="dot"></span>ISS — posição atual</div>
-      <div class="readout" id="iss-coords">carregando…</div>
-      <div class="sub-row">
-        <div class="sub-stat"><div class="val" id="iss-alt">—</div><div class="lbl">altitude atual</div></div>
-        <div class="sub-stat"><div class="val" id="iss-vel">—</div><div class="lbl">velocidade atual</div></div>
-        <div class="sub-stat"><div class="val">~92 min</div><div class="lbl">por órbita</div></div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-label"><span class="dot"></span>Clima espacial — vento solar</div>
-      <div id="solar-wind" class="readout">carregando…</div>
-      <div class="sub-row" id="kp-row"></div>
-    </div>
-
-    <div class="panel full">
-      <div class="panel-label"><span class="dot"></span>Imagem astronômica do dia — NASA</div>
-      <div id="apod"></div>
-    </div>
-
     <div class="panel full">
       <div class="panel-label"><span class="dot"></span>Observatório — K2-18 b</div>
       <div class="exo-subtitle">o mundo em disputa: suspeita de biossinatura ainda não confirmada</div>
@@ -644,19 +711,32 @@
       <div class="panel-label"><span class="dot"></span>Caderneta de campo</div>
       <div class="exo-subtitle">suas anotações e cálculos sobre K2-18 b</div>
 
-      <div class="notebook">
-        <textarea id="note-input" placeholder="Anote uma descoberta, uma dúvida, um cálculo…"></textarea>
-        <div class="notebook-controls">
-          <select id="note-tag">
-            <option value="pesquisa">pesquisa</option>
-            <option value="calculo">cálculo</option>
-            <option value="duvida">dúvida</option>
-          </select>
-          <button id="note-add">anotar</button>
+      <div class="journal">
+        <div class="journal-ribbon">
+          <div class="journal-ribbon-num" id="note-count">0</div>
+          <div class="journal-ribbon-label">notas</div>
+        </div>
+
+        <div class="journal-book">
+          <div class="journal-page journal-left">
+            <div class="journal-heading">nova entrada</div>
+            <textarea id="note-input" placeholder="Anote uma descoberta, uma dúvida, um cálculo…"></textarea>
+            <div class="journal-tags">
+              <button class="tag-btn active" data-tag="pesquisa" type="button">📖 pesquisa</button>
+              <button class="tag-btn" data-tag="calculo" type="button">🧮 cálculo</button>
+              <button class="tag-btn" data-tag="duvida" type="button">❓ dúvida</button>
+            </div>
+            <button id="note-add" type="button">anotar</button>
+          </div>
+
+          <div class="journal-spine"></div>
+
+          <div class="journal-page journal-right">
+            <div class="journal-heading">registros</div>
+            <div id="note-list" class="note-list"></div>
+          </div>
         </div>
       </div>
-
-      <div id="note-list" class="note-list"></div>
     </div>
 
     <div class="footnote full" id="footnote">fontes: wheretheiss.at · NOAA SWPC · NASA APOD (demo key) · astronomy-engine</div>
@@ -670,69 +750,6 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
-
-async function loadISS() {
-  const el = document.getElementById('iss-coords');
-  try {
-    const res = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
-    if (!res.ok) throw new Error('sem resposta');
-    const data = await res.json();
-    const lat = data.latitude.toFixed(2);
-    const lon = data.longitude.toFixed(2);
-    el.innerHTML = `${lat}°, ${lon}°<small>latitude, longitude</small>`;
-    document.getElementById('iss-alt').textContent = `${Math.round(data.altitude)} km`;
-    document.getElementById('iss-vel').textContent = `${Math.round(data.velocity).toLocaleString('pt-BR')} km/h`;
-  } catch (e) {
-    el.innerHTML = `<span class="err">Não consegui buscar a posição agora.<br>Tente recarregar, ou veja ao vivo em wheretheiss.at</span>`;
-  }
-}
-
-async function loadSolarWind() {
-  const el = document.getElementById('solar-wind');
-  const kpRow = document.getElementById('kp-row');
-  try {
-    const res = await fetch('https://services.swpc.noaa.gov/products/summary/solar-wind-speed.json');
-    if (!res.ok) throw new Error('sem resposta');
-    const data = await res.json();
-    const speed = Math.round(data[0].proton_speed);
-    el.innerHTML = `${speed} <span style="font-size:16px">km/s</span><small>velocidade do vento solar (prótons)</small>`;
-
-    const kpRes = await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json');
-    const kpData = await kpRes.json();
-    const lastKp = kpData[kpData.length - 1].Kp;
-    kpRow.innerHTML = `
-      <div class="sub-stat"><div class="val">${lastKp.toFixed(1)}</div><div class="lbl">índice Kp atual</div></div>
-      <div class="sub-stat"><div class="val">${lastKp >= 5 ? 'tempestade geomagnética' : 'condições calmas'}</div><div class="lbl">status</div></div>
-    `;
-  } catch (e) {
-    el.innerHTML = `<span class="err">Dados de clima espacial indisponíveis agora.<br>Veja ao vivo em swpc.noaa.gov</span>`;
-  }
-}
-
-async function loadAPOD() {
-  const el = document.getElementById('apod');
-  try {
-    const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
-    if (!res.ok) throw new Error('sem resposta');
-    const data = await res.json();
-    if (data.media_type === 'image') {
-      el.innerHTML = `
-        <img class="apod-img" src="${data.url}" alt="${data.title}">
-        <div class="apod-title">${data.title}</div>
-        <div class="apod-desc">${data.explanation}</div>
-      `;
-    } else {
-      el.innerHTML = `<div class="apod-title">${data.title}</div><div class="apod-desc">Hoje é um vídeo — veja em apod.nasa.gov</div>`;
-    }
-  } catch (e) {
-    el.innerHTML = `<span class="err">A NASA limita a chave de demonstração (DEMO_KEY) a poucos pedidos por hora.<br>Pegue sua própria chave grátis em api.nasa.gov e troque no código (linha do fetch do APOD) para uso ilimitado.</span>`;
-  }
-}
-
-loadISS();
-loadSolarWind();
-loadAPOD();
-setInterval(loadISS, 15000);
 </script>
 
 <script type="module">
@@ -774,7 +791,7 @@ function updateSkyDot(azimuth, altitude) {
   const dot = document.getElementById('body-dot');
   dot.setAttribute('cx', x.toFixed(1));
   dot.setAttribute('cy', y.toFixed(1));
-  dot.setAttribute('fill', altitude > 0 ? '#F2A94E' : '#B7A3E0');
+  dot.setAttribute('fill', altitude > 0 ? '#F2A94E' : '#4F7A72');
 }
 
 // Percurso da estrela pelo céu nas próximas 24h (amostragem a cada 15 min)
@@ -825,7 +842,7 @@ function updateScrub(baseDate, offsetMinutes) {
   scrubDot.setAttribute('cx', x.toFixed(1));
   scrubDot.setAttribute('cy', y.toFixed(1));
   scrubDot.setAttribute('opacity', '1');
-  scrubDot.setAttribute('stroke', hor.altitude > 0 ? '#F2A94E' : '#B7A3E0');
+  scrubDot.setAttribute('stroke', hor.altitude > 0 ? '#F2A94E' : '#4F7A72');
   label.textContent = fmtDate(t);
 }
 
@@ -923,8 +940,18 @@ setInterval(computeExo, 60000);
   const STORAGE_KEY = 'k2-18-caderneta';
   const listEl = document.getElementById('note-list');
   const inputEl = document.getElementById('note-input');
-  const tagEl = document.getElementById('note-tag');
+  const tagButtons = document.querySelectorAll('.tag-btn');
   const addBtn = document.getElementById('note-add');
+  const countEl = document.getElementById('note-count');
+  let selectedTag = 'pesquisa';
+
+  tagButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tagButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedTag = btn.dataset.tag;
+    });
+  });
 
   const tagLabels = { pesquisa: 'pesquisa', calculo: 'cálculo', duvida: 'dúvida' };
 
@@ -943,6 +970,7 @@ setInterval(computeExo, 60000);
   function render() {
     const notes = loadNotes();
     listEl.innerHTML = '';
+    countEl.textContent = notes.length;
 
     if (notes.length === 0) {
       const empty = document.createElement('div');
@@ -994,7 +1022,7 @@ setInterval(computeExo, 60000);
     const text = inputEl.value.trim();
     if (!text) return;
     const notes = loadNotes();
-    notes.push({ text, tag: tagEl.value, time: Date.now() });
+    notes.push({ text, tag: selectedTag, time: Date.now() });
     saveNotes(notes);
     inputEl.value = '';
     render();
